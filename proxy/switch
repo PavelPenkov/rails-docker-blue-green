@@ -1,0 +1,15 @@
+#!/bin/bash
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+if [ $1 = "blue" ]
+  then
+    cp /etc/nginx/blue.conf /etc/nginx/proxy_pass.conf
+  else
+    cp /etc/nginx/green.conf /etc/nginx/proxy_pass.conf
+fi
+
+service nginx reload

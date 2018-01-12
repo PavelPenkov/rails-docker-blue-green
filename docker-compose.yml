@@ -1,0 +1,38 @@
+version: '3.2'
+
+services:
+  blue:
+    build:
+      context: ./app
+    environment:
+      DEPLOY_ENV: blue
+      SECRET_KEY_BASE: /run/secrets/secret_key_base
+    secrets:
+      - secret_key_base
+  green:
+    build:
+      context: ./app
+    environment:
+      DEPLOY_ENV: green
+      SECRET_KEY_BASE: /run/secrets/secret_key_base
+    secrets:
+      - secret_key_base
+  proxy:
+    build:
+      context: ./proxy
+    depends_on:
+      - blue
+      - green
+    ports:
+      - '80:80'
+      - '443:443'
+    secrets:
+      - ssl_certificate
+      - ssl_certificate_key
+secrets:
+  secret_key_base:
+    external: true
+  ssl_certificate:
+    file: ./domain.crt
+  ssl_certificate_key:
+    file: ./domain.key
